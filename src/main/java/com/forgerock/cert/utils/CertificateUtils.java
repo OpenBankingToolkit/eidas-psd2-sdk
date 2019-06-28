@@ -52,7 +52,6 @@ import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Set;
 import javax.xml.bind.DatatypeConverter;
-import javax.servlet.http.HttpServletRequest;
 
 
 public class CertificateUtils {
@@ -63,18 +62,6 @@ public class CertificateUtils {
         return (X509Certificate)certFactory.generateCertificate(inputStream);
     }
 
-
-    public static X509Certificate extractCertificate(HttpServletRequest req) {
-        X509Certificate[] certs = (X509Certificate[]) req.getAttribute("javax.servlet.request.X509Certificate");
-        if (null != certs && certs.length > 0) {
-            return certs[0];
-        }
-        return null;
-    }
-
-    public static X509Certificate[] extractCertificatesChain(HttpServletRequest req) {
-        return (X509Certificate[]) req.getAttribute("javax.servlet.request.X509Certificate");
-    }
 
     public static String generateB64EncodedSha1HashOfPublicKey(X509Certificate x509Cert) throws NoSuchAlgorithmException, CertificateEncodingException {
         MessageDigest md = MessageDigest.getInstance("SHA-1");
