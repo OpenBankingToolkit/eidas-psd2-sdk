@@ -1,4 +1,7 @@
 language: java
+jdk:
+  - openjdk11
+
 deploy:
 - provider: script
   script: bash release.sh
