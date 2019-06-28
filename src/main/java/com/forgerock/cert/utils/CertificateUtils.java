@@ -156,6 +156,11 @@ public class CertificateUtils {
     public static String getOrganisationIdentifier(X509Certificate cert) throws CertificateEncodingException,
             InvalidPsd2EidasCertificate {
         JcaX509CertificateHolder certHolder = new JcaX509CertificateHolder(cert);
+        return CertificateUtils.getOrganisationIdentifier(certHolder);
+    }
+
+    public static String getOrganisationIdentifier(JcaX509CertificateHolder certHolder )
+            throws InvalidPsd2EidasCertificate {
         X500Name subject = certHolder.getSubject();
         if(subject == null){
             throw new InvalidPsd2EidasCertificate("Certificate has no subject");

@@ -16,6 +16,7 @@
  */
 package com.forgerock.cert.psd2;
 
+import com.forgerock.cert.exception.InvalidPsd2EidasCertificate;
 import org.bouncycastle.asn1.*;
 
 import java.util.Enumeration;
@@ -24,33 +25,40 @@ import java.util.Set;
 
 public class RolesOfPsp extends ASN1Object {
 
-    private Set<RoleOfPsp> roles = new HashSet<RoleOfPsp>();
 
-    public RolesOfPsp(Set<RoleOfPsp> roles){
-        this.roles = roles;
-    }
+    private Set<RoleOfPsp> roles = new HashSet<RoleOfPsp>();
 
     public RolesOfPsp(){
     }
 
-    static RolesOfPsp getInstance(Object obj){
+    static RolesOfPsp getInstance(Object obj) throws InvalidPsd2EidasCertificate {
         if(obj instanceof RolesOfPsp){
             return (RolesOfPsp) obj;
         } else if (obj != null){
-            return new RolesOfPsp(ASN1Sequence.getInstance(obj));
+            try {
+                ASN1Sequence asn1Seq = ASN1Sequence.getInstance(obj);
+                return new RolesOfPsp(asn1Seq);
+            } catch (IllegalArgumentException e){
+                throw new InvalidPsd2EidasCertificate("Invalid argument to RolesOfPsp: " + obj.toString());
+            }
         }
         return null;
     }
 
-    private RolesOfPsp(ASN1Sequence seq){
+    private RolesOfPsp(ASN1Sequence seq) throws InvalidPsd2EidasCertificate {
         Enumeration e = seq.getObjects();
+        int noInSeq = seq.size();
+        for(int idx = 0; idx < noInSeq; ++idx){
+            ASN1Encodable enc = seq.getObjectAt(idx);
+            if(enc instanceof ASN1Sequence){
+                ASN1Sequence roleSequence = (ASN1Sequence) enc;
+                RoleOfPsp role = RoleOfPsp.getInstance(roleSequence);
+                this.roles.add(role);
+            } else {
+                throw new InvalidPsd2EidasCertificate("Unexpected data in ASN2Sequence expected to contain roles. " +
+                        "Seq: " + seq.toString());
+            }
 
-        // qcstatementInfo
-        while (e.hasMoreElements())
-        {
-            ASN1Sequence roleSequence = (ASN1Sequence) e.nextElement();
-            RoleOfPsp role = RoleOfPsp.getInstance(roleSequence);
-            this.roles.add(role);
         }
     }
 
@@ -60,12 +68,22 @@ public class RolesOfPsp extends ASN1Object {
         roles.forEach((s)->{
             roleVector.add(s.toASN1Primitive());
         });
-
         return new DERSequence(roleVector);
     }
 
     public RolesOfPsp addRole(Psd2Role psd2Role) {
         roles.add(new RoleOfPsp(psd2Role));
         return this;
+    }
+
+    @Override
+    public String toString() {
+        return "RolesOfPsp{" +
+                "roles=" + roles +
+                '}';
+    }
+
+    public Set<RoleOfPsp> getRolesOfPsp(){
+        return this.roles;
     }
 }

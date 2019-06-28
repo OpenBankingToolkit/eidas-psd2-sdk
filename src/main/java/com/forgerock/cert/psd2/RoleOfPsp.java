@@ -88,4 +88,15 @@ public class RoleOfPsp extends ASN1Object {
         v.add(new DERUTF8String(this.role.getRoleName()));
         return new DERSequence(v);
     }
+
+    public Psd2Role getRole() {
+        return role;
+    }
+
+    @Override
+    public String toString() {
+        return "RoleOfPsp{" +
+                "role=" + role +
+                '}';
+    }
 }

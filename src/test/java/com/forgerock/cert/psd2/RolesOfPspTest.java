@@ -16,17 +16,23 @@
  */
 package com.forgerock.cert.psd2;
 
+import com.forgerock.cert.exception.InvalidPsd2EidasCertificate;
+import org.bouncycastle.asn1.ASN1EncodableVector;
 import org.bouncycastle.asn1.ASN1Primitive;
+import org.bouncycastle.asn1.DERSequence;
+import org.bouncycastle.asn1.DERUTF8String;
+import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
 
 
 public class RolesOfPspTest {
 
     @Test
-    public void serializeAndDeserialize(){
+    public void serializeAndDeserialize() throws InvalidPsd2EidasCertificate {
         RolesOfPsp roles = new RolesOfPsp();
         roles.addRole(Psd2Role.PSP_AI)
                 .addRole(Psd2Role.PSP_AS);
@@ -34,5 +40,24 @@ public class RolesOfPspTest {
 
         RolesOfPsp deserialized = RolesOfPsp.getInstance(prim);
         assertThat(deserialized, is(roles));
+    }
+
+    @Test
+    public void testWithEmptySequence() throws InvalidPsd2EidasCertificate {
+        DERUTF8String str = new DERUTF8String("Nonsense");
+        ASN1EncodableVector roleVector = new ASN1EncodableVector();
+        DERSequence derSeq = new DERSequence(roleVector);
+        RolesOfPsp rolesOfPsp = RolesOfPsp.getInstance(derSeq);
+        assertThat(rolesOfPsp,  CoreMatchers.is(notNullValue()));
+    }
+
+    @Test(expected=InvalidPsd2EidasCertificate.class)
+    public void testWithInvalidDataInSequence() throws InvalidPsd2EidasCertificate {
+        DERUTF8String str = new DERUTF8String("Nonsense");
+        ASN1EncodableVector roleVector = new ASN1EncodableVector();
+        roleVector.add(str);
+        DERSequence derSeq = new DERSequence(roleVector);
+        RolesOfPsp rolesOfPsp = RolesOfPsp.getInstance(derSeq);
+        assertThat(rolesOfPsp,  CoreMatchers.is(notNullValue()));
     }
 }

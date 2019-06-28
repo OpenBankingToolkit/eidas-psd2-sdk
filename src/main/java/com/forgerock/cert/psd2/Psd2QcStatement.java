@@ -16,9 +16,13 @@
  */
 package com.forgerock.cert.psd2;
 
+import com.forgerock.cert.exception.InvalidPsd2EidasCertificate;
 import org.bouncycastle.asn1.*;
+import org.bouncycastle.asn1.x509.Extension;
+import org.bouncycastle.asn1.x509.Extensions;
 
 import java.io.IOException;
+import java.util.Optional;
 
 public class Psd2QcStatement extends ASN1Object {
 
@@ -33,16 +37,28 @@ public class Psd2QcStatement extends ASN1Object {
         this.ncaId = ncaId;
     }
 
-    public static Psd2QcStatement getInstance(Object obj){
+    /**
+     * Obtain a Psd2QcStatement object from an eidas certificate if it contains one.
+     * @param extensions
+     * @return Returns an Optional Psd2QcStatement. If the certificate did not contain a Psd2 QcStatement then it will
+     * be empty, if not it will contain the Psd2QcStatement
+     * @throws InvalidPsd2EidasCertificate If the contents of the ASN1 in the extension does not conform to the expected
+     * Schema
+     */
+    public static Optional<Psd2QcStatement> fromExtensions(Extensions extensions) throws InvalidPsd2EidasCertificate {
+        Extension extension = extensions.getExtension(Psd2QcStatement.getOid());
+        if(extension != null){
+            return Optional.of(Psd2QcStatement.getInstance(extension.getParsedValue()));
+        }
+        return Optional.empty();
+    }
+
+    public static Psd2QcStatement getInstance(Object obj) throws InvalidPsd2EidasCertificate {
         if(obj instanceof Psd2QcStatement){
             return (Psd2QcStatement) obj;
         } else if (obj != null){
-            try {
-                ASN1Sequence seq = ASN1Sequence.getInstance(obj);
-                return new Psd2QcStatement(seq);
-            } catch (IOException e){
-                return null;
-            }
+            ASN1Sequence seq = ASN1Sequence.getInstance(obj);
+            return new Psd2QcStatement(seq);
         }
         return null;
     }
@@ -70,7 +86,7 @@ public class Psd2QcStatement extends ASN1Object {
      * @param seq
      * @throws IOException
      */
-    private Psd2QcStatement(ASN1Sequence seq) throws IOException {
+    private Psd2QcStatement(ASN1Sequence seq) throws InvalidPsd2EidasCertificate {
 
         ASN1Sequence rolesSeq = (ASN1Sequence) seq.getObjectAt(0);
         this.roles = RolesOfPsp.getInstance(rolesSeq);
@@ -89,5 +105,19 @@ public class Psd2QcStatement extends ASN1Object {
 
     public RolesOfPsp getRoles() {
         return roles;
+    }
+
+    public String getNcaName() { return this.ncaName; };
+
+    public String getNcaId() { return this.ncaId; }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder("Psd2QcStatement{");
+        sb.append("ncaName='" + ncaName + '\'');
+        sb.append(", ncaId='" + ncaId + '\'');
+        sb.append(", roles='" + roles + '\'');
+        sb.append('}');
+        return sb.toString();
     }
 }

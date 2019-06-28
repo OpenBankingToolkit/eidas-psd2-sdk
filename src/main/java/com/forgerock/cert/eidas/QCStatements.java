@@ -46,11 +46,11 @@ public class QCStatements extends ASN1Object {
         if(obj instanceof QCStatements){
             Optional.of((QCStatements)obj);
         } else if (obj != null){
-            ASN1Sequence seq = ASN1Sequence.getInstance(obj);
             try {
+                ASN1Sequence seq = ASN1Sequence.getInstance(obj);
                 return Optional.of(new QCStatements(seq));
-            } catch (IllegalArgumentException | IOException e){
-                throw new InvalidPsd2EidasCertificate("Could not understand the QCStatements " + obj, e);
+            } catch (IllegalArgumentException  e){
+                throw new InvalidPsd2EidasCertificate("Exception creating the QCStatements : " + obj, e);
             }
         }
         return Optional.empty();
@@ -62,37 +62,39 @@ public class QCStatements extends ASN1Object {
      *            all of the QCStatements
      * @throws IOException
      */
-    private QCStatements(ASN1Sequence seq) throws IOException {
+    private QCStatements(ASN1Sequence seq) throws InvalidPsd2EidasCertificate {
 
         if (seq.size() < 1){
             throw new IllegalArgumentException("sequence may not be empty");
         }
 
-        // Now get the sequence that contains all of the QCStatements.
-        ASN1Sequence sequenceOfQCStatementes = seq;
-        Enumeration enumOfQCStatements = sequenceOfQCStatementes.getObjects();
+        Enumeration asn1QcStatements = seq.getObjects();
         // Iterate across the statements
-        while(enumOfQCStatements.hasMoreElements()){
+        while(asn1QcStatements.hasMoreElements()){
 
-            // So a statement should be in a sequence containing OID and optional extra stuff.
-            ASN1Sequence itemSeq = ASN1Sequence.getInstance(enumOfQCStatements.nextElement());
-            Enumeration innerEnum = itemSeq.getObjects();
-            // Get the first element of the sequence. This will be the oid that will identify the
-            // type of QCStatement.
+            try {
+                // So a statement should be in a sequence containing OID and optional extra stuff.
+                ASN1Sequence itemSeq = ASN1Sequence.getInstance(asn1QcStatements.nextElement());
+                Enumeration innerEnum = itemSeq.getObjects();
 
-            ASN1Encodable firstItem = (ASN1Encodable)innerEnum.nextElement();
-            if (firstItem instanceof ASN1ObjectIdentifier) {
-                ASN1ObjectIdentifier itemOid = ASN1ObjectIdentifier.getInstance(firstItem);
-                QCStatement qcItem = null;
-                if(innerEnum.hasMoreElements()){
-                    ASN1Encodable furtherInfo = (ASN1Encodable) innerEnum.nextElement();
-                    qcItem = new QCStatement(itemOid, furtherInfo);
+                // Get the first element of the sequence. This will be the oid that will identify the
+                // type of QCStatement.
+                ASN1Encodable firstItem = (ASN1Encodable) innerEnum.nextElement();
+                if (firstItem instanceof ASN1ObjectIdentifier) {
+                    ASN1ObjectIdentifier itemOid = ASN1ObjectIdentifier.getInstance(firstItem);
+                    QCStatement qcItem = null;
+                    if (innerEnum.hasMoreElements()) {
+                        ASN1Encodable furtherInfo = (ASN1Encodable) innerEnum.nextElement();
+                        qcItem = new QCStatement(itemOid, furtherInfo);
+                    } else {
+                        qcItem = new QCStatement(itemOid);
+                    }
+                    this.qcStatements.put(itemOid.getId(), qcItem);
                 } else {
-                    qcItem = new QCStatement(itemOid);
+                    throw new InvalidPsd2EidasCertificate("No ASN1ObjectIdentifier in Sequence");
                 }
-                this.qcStatements.put(itemOid.getId(), qcItem);
-            } else {
-                throw new IOException("No ASN1ObjectIdentifier in Sequence");
+            } catch (IllegalArgumentException e){
+                throw new InvalidPsd2EidasCertificate("Could not create QCStatements from ASN1Sequence", e);
             }
         }
     }
@@ -145,12 +147,19 @@ public class QCStatements extends ASN1Object {
         this.qcStatements.put(Psd2QcStatement.getOid().getId(), qcStatement);
     }
 
-    public Psd2QcStatement getPsd2QcStatement(){
+    public Optional<Psd2QcStatement> getPsd2QcStatement() throws InvalidPsd2EidasCertificate {
         QCStatement qcStatement = this.qcStatements.get(Psd2QcStatement.getOid().getId());
-        return Psd2QcStatement.getInstance(qcStatement.getStatementInfo());
+        return Optional.ofNullable(Psd2QcStatement.getInstance(qcStatement.getStatementInfo()));
     }
 
     public Optional<QCStatement> getQCStatement(ASN1ObjectIdentifier oid) {
         return Optional.ofNullable(this.qcStatements.get(oid.getId()));
+    }
+
+    @Override
+    public String toString() {
+        return "QCStatements{" +
+                "qcStatements=" + qcStatements +
+                '}';
     }
 }

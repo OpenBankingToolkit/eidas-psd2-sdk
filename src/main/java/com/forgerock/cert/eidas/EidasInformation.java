@@ -143,35 +143,13 @@ import java.util.Set;
 public class EidasInformation {
 
     private Set<Psd2Role>   roles = new HashSet<>();
-    private String          authorityAccessInfo;
     private String          caIssuerCertURL;
     private String          ocspUri;
-    private String          issuingDistributionPoint;
     private String          organisationId;
     private String          ncaName;
     private String          ncaId;
 
-    /**
-     * Information about the signing authority, e.g.
-     * Authority Information Access:
-     *                 OCSP - URI:http://ocsp.digicert.com
-     *                 CA Issuers - URI:http://cacerts.digicert.com/DigiCertSHA2HighAssuranceServerCA.crt
-     * @param authorityAccessInfo
-     * @return
-     */
-    public EidasInformation setAuthorityAccessInfo(String authorityAccessInfo) {
-        this.authorityAccessInfo = authorityAccessInfo;
-        return this;
-    }
 
-    public String getIssuingDistributionPoint() {
-        return issuingDistributionPoint;
-    }
-
-    public EidasInformation setIssuingDistributionPoint(String issuingDistributionPoint) {
-        this.issuingDistributionPoint = issuingDistributionPoint;
-        return this;
-    }
 
     /**
      * The URL at which the signing certificate of the issuing eIDAS authority may be obtained

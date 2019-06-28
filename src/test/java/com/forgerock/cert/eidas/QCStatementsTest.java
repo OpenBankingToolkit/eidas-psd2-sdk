@@ -69,8 +69,9 @@ public class QCStatementsTest {
         assertThat(deserialized.isEUQualifiedCert(), is(true));
         assertThat(deserialized.getEidasCertificateType(), is(eidasCertType));
 
-        Psd2QcStatement deserialisedPsd2Statment = deserialized.getPsd2QcStatement();
-        assertThat(deserialisedPsd2Statment, is(psd2QCStatement));
+        Optional<Psd2QcStatement> deserialisedPsd2StatmentOpt = deserialized.getPsd2QcStatement();
+        assertThat(deserialisedPsd2StatmentOpt.isPresent(), is(true));
+        assertThat(deserialisedPsd2StatmentOpt.get(), is(psd2QCStatement));
 
         assertThat(deserialized, is(qcStatements));
     }

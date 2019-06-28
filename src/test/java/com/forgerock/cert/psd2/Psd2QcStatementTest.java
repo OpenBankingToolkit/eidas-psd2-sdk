@@ -16,6 +16,7 @@
  */
 package com.forgerock.cert.psd2;
 
+import com.forgerock.cert.exception.InvalidPsd2EidasCertificate;
 import org.bouncycastle.asn1.ASN1Encoding;
 import org.bouncycastle.asn1.ASN1InputStream;
 import org.bouncycastle.asn1.ASN1Primitive;
@@ -43,7 +44,7 @@ public class Psd2QcStatementTest {
     }
 
     @Test
-    public void toASN1PrimAndBack(){
+    public void toASN1PrimAndBack() throws InvalidPsd2EidasCertificate {
         ASN1Primitive asn1Prim = qcStatement.toASN1Primitive();
         Psd2QcStatement fromASN1 = Psd2QcStatement.getInstance(asn1Prim);
         assertThat(fromASN1, is(this.qcStatement));
@@ -51,7 +52,7 @@ public class Psd2QcStatementTest {
     }
 
     @Test
-    public void toDEREncodedAndBack() throws IOException {
+    public void toDEREncodedAndBack() throws IOException, InvalidPsd2EidasCertificate {
         byte[] derEnc = this.qcStatement.getEncoded(ASN1Encoding.DER);
 
         ASN1InputStream aIn = new ASN1InputStream(derEnc);

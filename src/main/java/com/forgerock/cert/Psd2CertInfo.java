@@ -19,12 +19,17 @@ package com.forgerock.cert;
 import com.forgerock.cert.eidas.QCStatements;
 import com.forgerock.cert.exception.InvalidPsd2EidasCertificate;
 import com.forgerock.cert.exception.NoSuchRDNInField;
+import com.forgerock.cert.psd2.Psd2QcStatement;
 import com.forgerock.cert.utils.CertificateUtils;
 import com.forgerock.cert.utils.RdnField;
+import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.bouncycastle.asn1.ASN1String;
 import org.bouncycastle.asn1.x500.style.BCStyle;
+import org.bouncycastle.asn1.x509.AccessDescription;
 import org.bouncycastle.asn1.x509.AuthorityInformationAccess;
 import org.bouncycastle.asn1.x509.Extensions;
+import org.bouncycastle.asn1.x509.GeneralName;
 import org.bouncycastle.asn1.x509.qualified.QCStatement;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateHolder;
 
@@ -42,28 +47,61 @@ public class Psd2CertInfo {
     private AuthorityInformationAccess authorityInfoAccess = null;
     private String organizationId;
     private List<X509Certificate> certs;
+    private Psd2QcStatement psd2QcStatement;
 
-    public Psd2CertInfo(X509Certificate[] cert) throws CertificateEncodingException, InvalidPsd2EidasCertificate {
+    public Psd2CertInfo(X509Certificate[] cert) throws InvalidPsd2EidasCertificate {
         this(Arrays.asList(cert));
     }
 
-    public Psd2CertInfo(List<X509Certificate> certs) throws CertificateEncodingException, InvalidPsd2EidasCertificate {
-        JcaX509CertificateHolder certHolder = new JcaX509CertificateHolder(certs.get(0));
+    public Psd2CertInfo(List<X509Certificate> certs) throws InvalidPsd2EidasCertificate {
+        JcaX509CertificateHolder certHolder;
+        try {
+            certHolder = new JcaX509CertificateHolder(certs.get(0));
+        } catch (CertificateEncodingException e){
+            throw new InvalidPsd2EidasCertificate("Failed to understand certificate ", e);
+        }
+
         this.certs = certs;
         Extensions extensions = certHolder.getExtensions();
         if (extensions != null) {
             Optional<QCStatements> qcStatementsOpt = QCStatements.fromExtensions(extensions);
             if(qcStatementsOpt.isPresent()){
                 this.qcStatements = qcStatementsOpt.get();
+                Optional<Psd2QcStatement> psd2QcStatementOpt = this.qcStatements.getPsd2QcStatement();
+                if(psd2QcStatementOpt.isPresent()){
+                    this.psd2QcStatement = psd2QcStatementOpt.get();
+                }
             }
+
             this.authorityInfoAccess = AuthorityInformationAccess.fromExtensions(extensions);
-            this.organizationId = CertificateUtils.getOrganisationIdentifier(certs.get(0));
+            this.organizationId = CertificateUtils.getOrganisationIdentifier(certHolder);
+
         }
     }
 
     public Boolean isPsd2Cert(){
-        return (this.qcStatements != null && this.qcStatements.isEUQualifiedCert()
-                && this.qcStatements.getPsd2QcStatement() != null);
+        boolean isPsd2Cert =  (this.qcStatements != null && this.qcStatements.isEUQualifiedCert()
+                && this.psd2QcStatement != null);
+        return isPsd2Cert;
+    }
+
+    public Optional<String> getJwkUri(){
+        if(isPsd2Cert() && getAuthorityAccessInfo().isPresent()){
+            AuthorityInformationAccess authInfoAccess =  getAuthorityAccessInfo().get();
+            AccessDescription[] accessDescriptions = authInfoAccess.getAccessDescriptions();
+            for(int i = 0; i < accessDescriptions.length; ++i){
+                AccessDescription accesDescription = accessDescriptions[i];
+                if(accesDescription != null){
+                    if(accesDescription.getAccessMethod().getId().equals(AccessDescription.id_ad_caIssuers.getId())){
+                        GeneralName generalName = accesDescription.getAccessLocation();
+                        ASN1Encodable gName = generalName.getName();
+                        ASN1String name = (ASN1String)gName;
+                        return Optional.of(name.getString());
+                    }
+                }
+            }
+        }
+        return Optional.empty();
     }
 
     public Optional<AuthorityInformationAccess> getAuthorityAccessInfo() {
@@ -85,4 +123,25 @@ public class Psd2CertInfo {
         X509Certificate appCert = this.certs.get(0);
         return CertificateUtils.getRDNAsString(appCert, RdnField.SUBJECT, BCStyle.CN);
     }
+
+    public Optional<Psd2QcStatement> getPsd2QCStatement() throws InvalidPsd2EidasCertificate {
+        return Optional.ofNullable(this.psd2QcStatement);
+    }
+
+
+    @Override
+    public String toString() {
+        String LINE_SEP =  System.getProperty("line.separator");
+        StringBuilder sb = new StringBuilder("Psd2Cert: ");
+        if(isPsd2Cert()){
+            sb.append("OrganizationId is '").append(this.organizationId).append("'").append(LINE_SEP);
+            sb.append("Subject is: ").append(this.certs.get(0).getSubjectDN().getName()).append(LINE_SEP);
+            sb.append("Psd2Statements: ").append(this.psd2QcStatement.toString()).append(LINE_SEP);
+            sb.append("QCStatements: ").append(this.qcStatements.toString()).append(LINE_SEP);
+        } else {
+            sb.append("Constructed from non PSD2 certificate");
+        }
+        return sb.toString();
+    }
+
 }
