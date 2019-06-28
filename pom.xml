@@ -155,9 +155,9 @@
     </profiles>
 
     <scm>
-        <connection>scm:git:https://github.com/ForgeCloud/eidas-psd2-sdk.git</connection>
-        <developerConnection>scm:git:https://github.com/ForgeCloud/eidas-psd2-sdk.git</developerConnection>
-        <url>https://github.com/ForgeCloud/eidas-psd2-sdk</url>
+        <connection>scm:git:https://github.com/ForgeRock/eidas-psd2-sdk.git</connection>
+        <developerConnection>scm:git:https://github.com/ForgeRock/eidas-psd2-sdk.git</developerConnection>
+        <url>https://github.com/ForgeRock/eidas-psd2-sdk.git</url>
         <tag>HEAD</tag>
     </scm>
 
