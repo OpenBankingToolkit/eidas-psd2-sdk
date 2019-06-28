@@ -22,7 +22,7 @@ import com.forgerock.cert.exception.InvalidEidasCertType;
  * An enum that also ties the ASN.1 oid to the type for use when creating
  * certificates. Types expected in the QC-STATEMENT in a compliant eIDAS
  * cert are specified in
- * {@link "https://www.etsi.org/deliver/etsi_en/319400_319499/31941205/02.00.12_20/en_31941205v020012a.pdf"}
+ * <a href="https://www.etsi.org/deliver/etsi_en/319400_319499/31941205/02.00.12_20/en_31941205v020012a.pdf"></a>
  *
  * The types are;
  *  <pre>

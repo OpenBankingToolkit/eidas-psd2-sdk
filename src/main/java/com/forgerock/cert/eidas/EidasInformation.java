@@ -24,7 +24,7 @@ import java.util.Set;
 /**
  * Information required to create an eIDAS Qualified seals and certs.
  * The spec defining what should be included in an eIDAS cert is Regulation (EU) No 910/2014 - which may be found
- * in {@link "https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32014R0910&from=EN"}
+ * in <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32014R0910&from=EN"></a>
  *
  * ====================================================================================================================
  * As of 19/10/2018 the following spec applies;
@@ -121,23 +121,23 @@ import java.util.Set;
  *
  * ASORSYS eIDAS QWAC GENERATOR
  * A German Consulting company called Adorsys have a QWAC generator that is available here;
- * {@link "http://tppserver.cloud.adorsys.de/swagger-ui.html#!/certificate-ctrl/addUsingPOST"}
+ * <a href="http://tppserver.cloud.adorsys.de/swagger-ui.html#!/certificate-ctrl/addUsingPOST"></a>
  *
  * It uses the following ASN.1 object id to store the organisationIdentifier in rather than the Konsentus approach
  * that stores the organisationIdentifier as an extension (the implication here is that it would be stored in an
  * ASN.1 extension in a real eIDAS certificate. Our approach should be to put this info in both.
  *
- * {@link "https://www.etsi.org/deliver/etsi_en/319400_319499/31941205/02.00.12_20/en_31941205v020012a.pdf"}
+ * <a href="https://www.etsi.org/deliver/etsi_en/319400_319499/31941205/02.00.12_20/en_31941205v020012a.pdf"></a>
  *
  * ====================================================================================================================
  *
  * AUTHORITATIVE DOCUMENT ON WHERE EIDAS EXTENSION INFORMATION SHOULD BE STORED
  *
  * The following ETSI document (Draft) specified how some of the extra information should be provided in the certificate;
- * {@link "https://www.etsi.org/deliver/etsi_en/319400_319499/31941205/02.00.12_20/en_31941205v020012a.pdf"}
+ * <a href="https://www.etsi.org/deliver/etsi_en/319400_319499/31941205/02.00.12_20/en_31941205v020012a.pdf"></a>
  *
  * And this doc specifies how PSD2 specific attributes should be encoded;
- * {@link "https://www.etsi.org/deliver/etsi_ts/119400_119499/119495/01.01.02_60/ts_119495v010102p.pdf"}
+ * <a href="https://www.etsi.org/deliver/etsi_ts/119400_119499/119495/01.01.02_60/ts_119495v010102p.pdf"></a>
  *
  */
 public class EidasInformation {
@@ -153,7 +153,6 @@ public class EidasInformation {
 
     /**
      * The URL at which the signing certificate of the issuing eIDAS authority may be obtained
-     * @return
      */
     public String getCaIssuerCertURL() {
         return caIssuerCertURL;
@@ -165,7 +164,6 @@ public class EidasInformation {
 
     /**
      * The URI at which the Online Certificate Status Protocol (OCSP) may be found
-     * @return
      */
     public String getOcspUri() {
         return ocspUri;
@@ -195,7 +193,6 @@ public class EidasInformation {
     /**
      * Get the National Competent Authority that regulates the TPP who we are generating this
      * eidas PSD2 certificate for.
-     * @return
      */
     public String getNcaName() {
         return ncaName;
@@ -213,7 +210,6 @@ public class EidasInformation {
     /**
      * Get the id of the the National Competent Authority that regulates the TPP who we are going to generate an eidas
      * PSD2 certificate for.
-     * @return
      */
     public String getNcaId() {
         return ncaId;
@@ -222,7 +218,6 @@ public class EidasInformation {
     /**
      * Set the id of the the National Competent Authority that regulates the TPP who we are going to generate an eidas
      * PSD2 certificate for.
-     * @return
      */
     public void setNcaId(String ncaId) {
         this.ncaId = ncaId;

@@ -20,7 +20,7 @@ package com.forgerock.cert.psd2;
  * And enum class used to specify PSD2 TPP roles.
  * This enum ties the roles to the OID's specified for those
  * roles in the following ETSI document;
- * {@link "https://www.etsi.org/deliver/etsi_ts/119400_119499/119495/01.01.02_60/ts_119495v010102p.pdf"}
+ * <a href="https://www.etsi.org/deliver/etsi_ts/119400_119499/119495/01.01.02_60/ts_119495v010102p.pdf"></a>
  */
 public enum Psd2Role {
     PSP_AS ("0.4.0.19495.1.1", "Account Servicing"),
