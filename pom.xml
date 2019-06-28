@@ -32,6 +32,8 @@
 
     <properties>
         <bouncycastle.version>1.62</bouncycastle.version>
+        <java.version>11</java.version>
+
     </properties>
 
     <dependencyManagement>
@@ -87,7 +89,7 @@
                 <inherited>true</inherited>
                 <configuration>
                     <source>11</source>
-                    <target>1.8</target>
+                    <target>11</target>
                 </configuration>
             </plugin>
             <plugin>

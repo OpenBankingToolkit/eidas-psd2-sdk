@@ -1,9 +1,18 @@
 /**
- * Copyright 2019 ForgeRock AS. All Rights Reserved
  *
- * Use of this code requires a commercial software license with ForgeRock AS.
- * or with one of its affiliates. All use shall be exclusively subject
- * to such license between the licensee and ForgeRock AS.
+ * The contents of this file are subject to the terms of the Common Development and
+ *  Distribution License (the License). You may not use this file except in compliance with the
+ *  License.
+ *
+ *  You can obtain a copy of the License at https://forgerock.org/cddlv1-0/. See the License for the
+ *  specific language governing permission and limitations under the License.
+ *
+ *  When distributing Covered Software, include this CDDL Header Notice in each file and include
+ *  the License file at legal/CDDLv1.0.txt. If applicable, add the following below the CDDL
+ *  Header, with the fields enclosed by brackets [] replaced by your own identifying
+ *  information: "Portions copyright [year] [name of copyright owner]".
+ *
+ *  Copyright 2019 ForgeRock AS.
  */
 package com.forgerock.cert.eidas;
 
@@ -15,6 +24,7 @@ import com.forgerock.cert.psd2.Psd2Role;
 import com.forgerock.cert.psd2.RolesOfPsp;
 import org.bouncycastle.asn1.*;
 import org.bouncycastle.asn1.x509.qualified.ETSIQCObjectIdentifiers;
+import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -22,6 +32,7 @@ import java.util.Optional;
 
 import static org.hamcrest.core.Is.is;
 import static org.hamcrest.core.IsNot.not;
+import static org.hamcrest.core.IsNull.notNullValue;
 import static org.junit.Assert.assertThat;
 
 
@@ -76,7 +87,7 @@ public class QCStatementsTest {
         DERUTF8String string = new DERUTF8String("Load of old tripe");
         vector.add(string);
         ASN1Sequence seq = ASN1Sequence.getInstance(new DERSequence(vector));
-        assertThat(seq, not(null));
+        assertThat(seq, CoreMatchers.is(notNullValue()));
         Optional<QCStatements> statements = QCStatements.getInstance(seq);
     }
 }
