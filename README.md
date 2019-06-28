@@ -13,12 +13,12 @@
  *
  * Copyright 2017 ForgeRock AS.
 -->
-[![Build Status](https://travis-ci.org/ForgeRock/OpenBanking-Java-SDK.svg?branch=master)](https://travis-ci.org/ForgeRock/OpenBanking-Java-SDK)
-# OpenBanking-Java-SDK
-A Java SDK to help implementing the Open Banking standard : https://www.openbanking.org.uk/read-write-apis/
+[![Build Status](https://travis-ci.org/ForgeRock/eidas-psd2-sdk.svg?branch=master)](https://travis-ci.org/ForgeRock/eidas-psd2-sdk)
+# EIDAS - PSD2 certificate Java SDK
+A Java SDK to help you manipulate EIDAS - PSD2 certificates
 
 ## Release to maven central
-1. Go to https://bintray.com/forgerock/ORBI/openbanking-sdk/
+1. Go to https://bintray.com/forgerock/ORBI/eidas-psd2-sdk/
 1. Choose the version
 1. Click `Maven Central` tab
 1. Click `Sync`
