@@ -174,4 +174,13 @@
             <url>https://opensource.org/licenses/CDDL-1.0</url>
         </license>
     </licenses>
+    
+    <developers>
+        <developer>
+            <name>Quentin Castel</name>
+            <email>quentin.castel@forgerock.com</email>
+            <organization>ForgeRock</organization>
+            <organizationUrl>http://www.forgerock.com</organizationUrl>
+        </developer>
+    </developers>
 </project>
