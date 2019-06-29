@@ -241,7 +241,7 @@ public class CertificateUtils {
                 ASN1Encodable attributeValue = attributeTypeAndValue.getValue();
                 if(attributeValue != null){
                     String value =  IETFUtils.valueToString(attributeValue);
-                    if(isEmpty(value)){
+                    if(!isEmpty(value)){
                         return value;
                     }
                 }
@@ -253,6 +253,6 @@ public class CertificateUtils {
     }
     
     private static boolean isEmpty(String value) {
-        return value != null && !"".equals(value);
+        return value == null || "".equals(value);
     }
 }

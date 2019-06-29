@@ -16,7 +16,9 @@
  */
 package com.forgerock.cert;
 
+import com.forgerock.cert.eidas.EidasCertType;
 import com.forgerock.cert.eidas.QCStatements;
+import com.forgerock.cert.exception.InvalidEidasCertType;
 import com.forgerock.cert.exception.InvalidPsd2EidasCertificate;
 import com.forgerock.cert.exception.NoSuchRDNInField;
 import com.forgerock.cert.psd2.Psd2QcStatement;
@@ -48,6 +50,7 @@ public class Psd2CertInfo {
     private String organizationId;
     private List<X509Certificate> certs;
     private Psd2QcStatement psd2QcStatement;
+    private EidasCertType eidasCertType;
 
     public Psd2CertInfo(X509Certificate[] cert) throws InvalidPsd2EidasCertificate {
         this(Arrays.asList(cert));
@@ -67,6 +70,11 @@ public class Psd2CertInfo {
             Optional<QCStatements> qcStatementsOpt = QCStatements.fromExtensions(extensions);
             if(qcStatementsOpt.isPresent()){
                 this.qcStatements = qcStatementsOpt.get();
+                try {
+                    eidasCertType = qcStatements.getEidasCertificateType();
+                } catch (InvalidEidasCertType invalidEidasCertType) {
+                    // not a EIDAS cert
+                }
                 Optional<Psd2QcStatement> psd2QcStatementOpt = this.qcStatements.getPsd2QcStatement();
                 if(psd2QcStatementOpt.isPresent()){
                     this.psd2QcStatement = psd2QcStatementOpt.get();
@@ -114,6 +122,11 @@ public class Psd2CertInfo {
         }
         return Optional.empty();
     }
+
+    public EidasCertType getEidasCertType() {
+       return this.eidasCertType;
+    }
+
 
     public Optional<String> getOrganizationId(){
         return Optional.ofNullable(this.organizationId);
