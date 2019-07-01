@@ -70,11 +70,6 @@ public class Psd2CertInfo {
             Optional<QCStatements> qcStatementsOpt = QCStatements.fromExtensions(extensions);
             if(qcStatementsOpt.isPresent()){
                 this.qcStatements = qcStatementsOpt.get();
-                try {
-                    eidasCertType = qcStatements.getEidasCertificateType();
-                } catch (InvalidEidasCertType invalidEidasCertType) {
-                    // not a EIDAS cert
-                }
                 Optional<Psd2QcStatement> psd2QcStatementOpt = this.qcStatements.getPsd2QcStatement();
                 if(psd2QcStatementOpt.isPresent()){
                     this.psd2QcStatement = psd2QcStatementOpt.get();
@@ -123,8 +118,8 @@ public class Psd2CertInfo {
         return Optional.empty();
     }
 
-    public EidasCertType getEidasCertType() {
-       return this.eidasCertType;
+    public Optional<EidasCertType> getEidasCertType() throws InvalidEidasCertType {
+       return qcStatements.getEidasCertificateType();
     }
 
 

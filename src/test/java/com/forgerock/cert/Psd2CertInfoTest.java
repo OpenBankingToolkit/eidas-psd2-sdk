@@ -16,6 +16,8 @@
  */
 package com.forgerock.cert;
 
+import com.forgerock.cert.eidas.EidasCertType;
+import com.forgerock.cert.exception.InvalidEidasCertType;
 import com.forgerock.cert.exception.InvalidPsd2EidasCertificate;
 import com.forgerock.cert.exception.NoSuchRDNInField;
 import com.forgerock.cert.utils.CertificateUtils;
@@ -48,8 +50,8 @@ public class Psd2CertInfoTest {
     @Parameterized.Parameters
     public static Collection<Object[]> data(){
         Set<Object[]> testCerts = new HashSet<Object[]>();
-        testCerts.add(new Object[]{new CertificateTestSpec("FrDirectoryPsd2Certificate", "src/test/resources/dev-transport.pem", true)});
-        testCerts.add(new Object[]{new CertificateTestSpec("FrDirectoryPrePsd2Cert", "src/test/resources/fr-directory.pem", false)});
+        testCerts.add(new Object[]{new CertificateTestSpec("FrDirectoryPsd2Certificate", "src/test/resources/dev-transport.pem", true, EidasCertType.WEB)});
+        testCerts.add(new Object[]{new CertificateTestSpec("FrDirectoryPrePsd2Cert", "src/test/resources/fr-directory.pem", false, null)});
         return testCerts;
     }
 
@@ -64,10 +66,14 @@ public class Psd2CertInfoTest {
     }
 
     @Test
-    public void isPsd2CertTest() throws IOException, CertificateException, InvalidPsd2EidasCertificate {
+    public void isPsd2CertTest() throws Exception {
         Psd2CertInfo psd2CertInfo = new Psd2CertInfo(testSpec.getCert());
         assertThat(psd2CertInfo, is(notNullValue()));
         assertThat(psd2CertInfo.isPsd2Cert(), is(testSpec.isPsd2Cert()));
+        if (psd2CertInfo.isPsd2Cert()) {
+            assertThat(psd2CertInfo.getEidasCertType().isPresent(), is(true));
+            assertThat(psd2CertInfo.getEidasCertType().get(), is(testSpec.getEidasCertType()));
+        }
     }
 
     @Test

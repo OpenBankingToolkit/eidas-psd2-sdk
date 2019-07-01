@@ -44,7 +44,7 @@ public class QCStatementsTest {
         qcStatements.addStatement(ETSIQCObjectIdentifiers.id_etsi_qcs_QcCompliance);
         qcStatements.addStatement(ASN1ObjectIdentifiers.id_etsi_qcs_SemanticsId_Legal);
         EidasCertType eidasCertType = EidasCertType.ESIGN;
-        qcStatements.setEidasCertificateType(eidasCertType);
+        qcStatements.addStatement( new ASN1ObjectIdentifier(eidasCertType.getOid()));
 
         // Create the PSD2 QCStatement
         // Add the roles.
@@ -67,7 +67,9 @@ public class QCStatementsTest {
         assertThat(deserializedOptional.isPresent(), is(true));
         QCStatements deserialized = deserializedOptional.get();
         assertThat(deserialized.isEUQualifiedCert(), is(true));
-        assertThat(deserialized.getEidasCertificateType(), is(eidasCertType));
+        assertThat(deserialized.getEidasCertificateType().isPresent(), is(true));
+
+        assertThat(deserialized.getEidasCertificateType().get(), is(eidasCertType));
 
         Optional<Psd2QcStatement> deserialisedPsd2StatmentOpt = deserialized.getPsd2QcStatement();
         assertThat(deserialisedPsd2StatmentOpt.isPresent(), is(true));

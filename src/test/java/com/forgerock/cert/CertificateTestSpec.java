@@ -16,6 +16,8 @@
  */
 package com.forgerock.cert;
 
+import com.forgerock.cert.eidas.EidasCertType;
+
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.cert.CertificateException;
@@ -26,15 +28,21 @@ class CertificateTestSpec {
     private String certName;
     private String filePath;
     private Boolean isPsd2Cert;
+    private EidasCertType eidasCertType;
 
-    public CertificateTestSpec(String certName, String filePath, Boolean isPsd2Cert) {
+    public CertificateTestSpec(String certName, String filePath, Boolean isPsd2Cert, EidasCertType eidasCertType) {
         this.certName = certName;
         this.filePath = filePath;
         this.isPsd2Cert = isPsd2Cert;
+        this.eidasCertType = eidasCertType;
     }
 
     public X509Certificate[] getCert() throws IOException, CertificateException {
         return getCertFromFile(this.filePath);
+    }
+
+    public EidasCertType getEidasCertType() {
+        return eidasCertType;
     }
 
     private X509Certificate[] getCertFromFile(String path) throws IOException, CertificateException {
