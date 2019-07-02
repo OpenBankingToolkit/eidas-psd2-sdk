@@ -18,10 +18,7 @@
 A Java SDK to help you manipulate EIDAS - PSD2 certificates
 
 ## Release to maven central
-1. Go to https://bintray.com/forgerock/ORBI/eidas-psd2-sdk/
-1. Choose the version
-1. Click `Maven Central` tab
-1. Click `Sync`
+Maven artifacts are automatically deployed to maven central via the sonatype staging repository. This happens on a merge to master, Travis will execute the steps
 
 ## Licence
 License:	CDDLv1.0 \
