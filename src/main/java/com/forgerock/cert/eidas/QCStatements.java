@@ -26,10 +26,7 @@ import org.bouncycastle.asn1.x509.qualified.ETSIQCObjectIdentifiers;
 import org.bouncycastle.asn1.x509.qualified.QCStatement;
 
 import java.io.IOException;
-import java.util.Enumeration;
-import java.util.Map;
-import java.util.Optional;
-import java.util.TreeMap;
+import java.util.*;
 
 
 public class QCStatements extends ASN1Object {
@@ -133,13 +130,8 @@ public class QCStatements extends ASN1Object {
         this.qcStatements.put(oid.getId(), qcStatement);
     }
 
-    public EidasCertType getEidasCertificateType() throws InvalidEidasCertType {
-        QCStatement qcStatement =  this.qcStatements.get(ETSIQCObjectIdentifiers.id_etsi_qcs_QcType.getId());
-        if(qcStatement != null){
-            ASN1ObjectIdentifier typeOid = ASN1ObjectIdentifier.getInstance(qcStatement.getStatementInfo());
-            return EidasCertType.getInstance(typeOid.getId());
-        }
-        throw new InvalidEidasCertType("No QCType available");
+    public Optional<EidasCertType> getEidasCertificateType() throws InvalidEidasCertType {
+        return Arrays.asList(EidasCertType.values()).stream().filter(t -> this.qcStatements.containsKey(t.getOid())).findAny();
     }
 
     public void setPsd2QcStatement(Psd2QcStatement psd2QCStatement) {
