@@ -153,6 +153,7 @@ public class EidasInformation {
 
     /**
      * The URL at which the signing certificate of the issuing eIDAS authority may be obtained
+     * @return CA ussier cert url
      */
     public String getCaIssuerCertURL() {
         return caIssuerCertURL;
@@ -164,6 +165,7 @@ public class EidasInformation {
 
     /**
      * The URI at which the Online Certificate Status Protocol (OCSP) may be found
+     * @return OCSP url
      */
     public String getOcspUri() {
         return ocspUri;
@@ -193,6 +195,7 @@ public class EidasInformation {
     /**
      * Get the National Competent Authority that regulates the TPP who we are generating this
      * eidas PSD2 certificate for.
+     * @return NCA Name
      */
     public String getNcaName() {
         return ncaName;
@@ -210,6 +213,7 @@ public class EidasInformation {
     /**
      * Get the id of the the National Competent Authority that regulates the TPP who we are going to generate an eidas
      * PSD2 certificate for.
+     * @return NCA ID
      */
     public String getNcaId() {
         return ncaId;
@@ -218,6 +222,7 @@ public class EidasInformation {
     /**
      * Set the id of the the National Competent Authority that regulates the TPP who we are going to generate an eidas
      * PSD2 certificate for.
+     * @param ncaId
      */
     public void setNcaId(String ncaId) {
         this.ncaId = ncaId;
