@@ -33,7 +33,7 @@
     <properties>
         <bouncycastle.version>1.62</bouncycastle.version>
         <java.version>11</java.version>
-        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
@@ -84,7 +84,7 @@
                 <version>2.5.1</version>
                 <inherited>true</inherited>
                 <configuration>
-                    <source>1.8</source>
+                    <source>11</source>
                     <target>1.8</target>
                 </configuration>
             </plugin>
