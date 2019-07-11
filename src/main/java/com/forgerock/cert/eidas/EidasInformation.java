@@ -204,7 +204,7 @@ public class EidasInformation {
     /**
      * Set the name of the National Competent Authority that regulates the TPP who we are going to generate an eidas
      * PSD2 certificate for.
-     * @param ncaName
+     * @param ncaName nca name
      */
     public void setNcaName(String ncaName) {
         this.ncaName = ncaName;
@@ -222,7 +222,7 @@ public class EidasInformation {
     /**
      * Set the id of the the National Competent Authority that regulates the TPP who we are going to generate an eidas
      * PSD2 certificate for.
-     * @param ncaId
+     * @param ncaId nca ID
      */
     public void setNcaId(String ncaId) {
         this.ncaId = ncaId;

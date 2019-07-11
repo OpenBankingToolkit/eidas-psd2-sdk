@@ -39,7 +39,7 @@ public class Psd2QcStatement extends ASN1Object {
 
     /**
      * Obtain a Psd2QcStatement object from an eidas certificate if it contains one.
-     * @param extensions
+     * @param extensions extensions
      * @return Returns an Optional Psd2QcStatement. If the certificate did not contain a Psd2 QcStatement then it will
      * be empty, if not it will contain the Psd2QcStatement
      * @throws InvalidPsd2EidasCertificate If the contents of the ASN1 in the extension does not conform to the expected
@@ -83,7 +83,7 @@ public class Psd2QcStatement extends ASN1Object {
      *     DERUTF8String NCAName
      *     DERUTF8String NCAId
      * }
-     * @param seq
+     * @param seq sequence
      * @throws IOException
      */
     private Psd2QcStatement(ASN1Sequence seq) throws InvalidPsd2EidasCertificate {
