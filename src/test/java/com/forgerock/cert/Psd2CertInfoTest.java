@@ -51,6 +51,7 @@ public class Psd2CertInfoTest {
     public static Collection<Object[]> data(){
         Set<Object[]> testCerts = new HashSet<Object[]>();
         testCerts.add(new Object[]{new CertificateTestSpec("FrDirectoryPsd2Certificate", "src/test/resources/dev-transport.pem", true, EidasCertType.WEB)});
+        testCerts.add(new Object[]{new CertificateTestSpec("OBDirectoryPsd2Certificate", "src/test/resources/ob-transport.pem", true, EidasCertType.WEB)});
         testCerts.add(new Object[]{new CertificateTestSpec("FrDirectoryPrePsd2Cert", "src/test/resources/fr-directory.pem", false, null)});
         return testCerts;
     }
