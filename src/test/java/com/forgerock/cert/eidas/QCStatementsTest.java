@@ -41,7 +41,7 @@ import static org.junit.Assert.assertThat;
 public class QCStatementsTest {
 
     @Test
-    public void testSerializedAndDeserializedAreEqual() throws InvalidPsd2EidasCertificate {
+    public void testSerializedAndDeserializedAreEqual() throws InvalidPsd2EidasCertificate, InvalidEidasCertType {
         QCStatements qcStatements = new QCStatements();
         qcStatements.addStatement(ETSIQCObjectIdentifiers.id_etsi_qcs_QcCompliance);
         qcStatements.addStatement(ASN1ObjectIdentifiers.id_etsi_qcs_SemanticsId_Legal);

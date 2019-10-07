@@ -138,22 +138,16 @@ public class QCStatements extends ASN1Object {
         this.qcStatements.put(oid.getId(), qcStatement);
     }
 
-    public Optional<EidasCertType> getEidasCertificateType() {
+    public Optional<EidasCertType> getEidasCertificateType() throws InvalidEidasCertType {
         EidasCertType type = null;
         QCStatement qcTypeStatement = this.qcStatements.get(ETSIQCObjectIdentifiers.id_etsi_qcs_QcType.getId());
         if(qcTypeStatement != null){
            ASN1Encodable qcTypeValue = qcTypeStatement.getStatementInfo();
            ASN1Encodable seq = ((DLSequence)qcTypeValue).getObjectAt(0);
            ASN1ObjectIdentifier qcTypeValueOid = ASN1ObjectIdentifier.getInstance(seq);
-           try {
-               type = EidasCertType.getInstance(qcTypeValueOid.getId());
-           } catch (Exception e){
-               String str = e.toString();
-           }
+           return Optional.of(EidasCertType.getInstance(qcTypeValueOid.getId()));
         }
-        return Optional.ofNullable(type);
-
-        //return Arrays.asList(EidasCertType.values()).stream().filter(t -> this.qcStatements.containsKey(t.getOid())).findAny();
+        return Optional.empty();
     }
 
     public void setPsd2QcStatement(Psd2QcStatement psd2QCStatement) {

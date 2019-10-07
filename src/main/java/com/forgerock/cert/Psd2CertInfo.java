@@ -82,26 +82,31 @@ public class Psd2CertInfo {
         }
     }
 
-    public Boolean isPsd2Cert(){
+    public Boolean isPsd2Cert() {
 
         // This line is more correct. However, OB certificates do not add the etsi qualified cert statement to their
         // eidas certificates, so we need to look to see if the qcType is set.
         // boolean isPsd2Cert =  (this.qcStatements != null && this.qcStatements.isEUQualifiedCert()
         //        && this.psd2QcStatement != null);
-        boolean isPsd2Cert = (this.qcStatements != null && this.qcStatements.getEidasCertificateType().isPresent()
-                && this.psd2QcStatement != null);
+        boolean isPsd2Cert = false;
+        try {
+            isPsd2Cert = (this.qcStatements != null && this.qcStatements.getEidasCertificateType().isPresent()
+                    && this.psd2QcStatement != null);
+        } catch (InvalidEidasCertType invalidCertType){
+            isPsd2Cert = false;
+        }
         return isPsd2Cert;
     }
 
-    public Optional<String> getJwkUri(){
-        if(isPsd2Cert() && getAuthorityAccessInfo().isPresent()){
+    public Optional<String> getAuthorityAccessInfoCAIssuer(){
+        if(getAuthorityAccessInfo().isPresent()){
             AuthorityInformationAccess authInfoAccess =  getAuthorityAccessInfo().get();
             AccessDescription[] accessDescriptions = authInfoAccess.getAccessDescriptions();
             for(int i = 0; i < accessDescriptions.length; ++i){
-                AccessDescription accesDescription = accessDescriptions[i];
-                if(accesDescription != null){
-                    if(accesDescription.getAccessMethod().getId().equals(AccessDescription.id_ad_caIssuers.getId())){
-                        GeneralName generalName = accesDescription.getAccessLocation();
+                AccessDescription accessDescription = accessDescriptions[i];
+                if(accessDescription != null){
+                    if(accessDescription.getAccessMethod().getId().equals(AccessDescription.id_ad_caIssuers.getId())){
+                        GeneralName generalName = accessDescription.getAccessLocation();
                         ASN1Encodable gName = generalName.getName();
                         ASN1String name = (ASN1String)gName;
                         return Optional.of(name.getString());
