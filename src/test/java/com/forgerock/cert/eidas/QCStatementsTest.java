@@ -24,7 +24,9 @@ import com.forgerock.cert.psd2.Psd2Role;
 import com.forgerock.cert.psd2.RolesOfPsp;
 import org.bouncycastle.asn1.*;
 import org.bouncycastle.asn1.x509.qualified.ETSIQCObjectIdentifiers;
+import org.bouncycastle.asn1.x509.qualified.QCStatement;
 import org.hamcrest.CoreMatchers;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -39,12 +41,16 @@ import static org.junit.Assert.assertThat;
 public class QCStatementsTest {
 
     @Test
-    public void testSerializedAndDeserializedAreEqual() throws IOException, InvalidEidasCertType, InvalidPsd2EidasCertificate {
+    public void testSerializedAndDeserializedAreEqual() throws InvalidPsd2EidasCertificate, InvalidEidasCertType {
         QCStatements qcStatements = new QCStatements();
         qcStatements.addStatement(ETSIQCObjectIdentifiers.id_etsi_qcs_QcCompliance);
         qcStatements.addStatement(ASN1ObjectIdentifiers.id_etsi_qcs_SemanticsId_Legal);
         EidasCertType eidasCertType = EidasCertType.ESIGN;
-        qcStatements.addStatement( new ASN1ObjectIdentifier(eidasCertType.getOid()));
+        ASN1ObjectIdentifier certTypeOid = new ASN1ObjectIdentifier(eidasCertType.getOid());
+        DLSequence dlSequence = new DLSequence(certTypeOid);
+        QCStatement certTypeStatement = new QCStatement(ETSIQCObjectIdentifiers.id_etsi_qcs_QcType,
+                dlSequence);
+        qcStatements.addStatement(certTypeStatement);
 
         // Create the PSD2 QCStatement
         // Add the roles.
