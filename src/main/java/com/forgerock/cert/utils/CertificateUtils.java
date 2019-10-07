@@ -27,6 +27,7 @@ import com.forgerock.cert.exception.InvalidPsd2EidasCertificate;
 import com.forgerock.cert.exception.NoSuchRDNInField;
 import org.bouncycastle.asn1.ASN1Encodable;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
+import org.bouncycastle.asn1.DLSequence;
 import org.bouncycastle.asn1.pkcs.PKCSObjectIdentifiers;
 import org.bouncycastle.asn1.x500.AttributeTypeAndValue;
 import org.bouncycastle.asn1.x500.RDN;
@@ -36,6 +37,7 @@ import org.bouncycastle.asn1.x500.style.BCStyle;
 import org.bouncycastle.asn1.x500.style.IETFUtils;
 import org.bouncycastle.asn1.x509.*;
 import org.bouncycastle.asn1.x509.qualified.ETSIQCObjectIdentifiers;
+import org.bouncycastle.asn1.x509.qualified.QCStatement;
 import org.bouncycastle.cert.jcajce.JcaX509CertificateHolder;
 import org.bouncycastle.pkcs.PKCS10CertificationRequestBuilder;
 
@@ -102,7 +104,10 @@ public class CertificateUtils {
         QCStatements qcStatements = new QCStatements();
         qcStatements.addStatement(ASN1ObjectIdentifiers.id_etsi_qcs_SemanticsId_Legal);
         qcStatements.addStatement(ETSIQCObjectIdentifiers.id_etsi_qcs_QcCompliance);
-        qcStatements.addStatement(new ASN1ObjectIdentifier(certType.getOid()));
+        ASN1ObjectIdentifier certTypeOid = new ASN1ObjectIdentifier(certType.getOid());
+        DLSequence certTypeSequence = new DLSequence(certTypeOid);
+        QCStatement certTypeStatement = new QCStatement(ETSIQCObjectIdentifiers.id_etsi_qcs_QcType, certTypeSequence);
+        qcStatements.addStatement(certTypeStatement);
         qcStatements.setPsd2QcStatement(psd2QCStatement);
         generator.addExtension(Extension.qCStatements, false, qcStatements.toASN1Primitive());
 

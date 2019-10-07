@@ -83,7 +83,12 @@ public class Psd2CertInfo {
     }
 
     public Boolean isPsd2Cert(){
-        boolean isPsd2Cert =  (this.qcStatements != null && this.qcStatements.isEUQualifiedCert()
+
+        // This line is more correct. However, OB certificates do not add the etsi qualified cert statement to their
+        // eidas certificates, so we need to look to see if the qcType is set.
+        // boolean isPsd2Cert =  (this.qcStatements != null && this.qcStatements.isEUQualifiedCert()
+        //        && this.psd2QcStatement != null);
+        boolean isPsd2Cert = (this.qcStatements != null && this.qcStatements.getEidasCertificateType().isPresent()
                 && this.psd2QcStatement != null);
         return isPsd2Cert;
     }
@@ -151,5 +156,4 @@ public class Psd2CertInfo {
         }
         return sb.toString();
     }
-
 }

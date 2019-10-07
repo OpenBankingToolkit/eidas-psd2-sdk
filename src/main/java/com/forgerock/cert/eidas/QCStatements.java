@@ -110,6 +110,14 @@ public class QCStatements extends ASN1Object {
         qcStatements.put(id.getId(), qcStatement);
     }
 
+    /**
+     * Adds the QCStatement to the list of statements
+     * @param statement - is added to the the list of statements.
+     */
+    public void addStatement(QCStatement statement){
+        qcStatements.put(statement.getStatementId().getId(), statement);
+    }
+
 
     @Override
     public ASN1Primitive toASN1Primitive() {
@@ -130,8 +138,22 @@ public class QCStatements extends ASN1Object {
         this.qcStatements.put(oid.getId(), qcStatement);
     }
 
-    public Optional<EidasCertType> getEidasCertificateType() throws InvalidEidasCertType {
-        return Arrays.asList(EidasCertType.values()).stream().filter(t -> this.qcStatements.containsKey(t.getOid())).findAny();
+    public Optional<EidasCertType> getEidasCertificateType() {
+        EidasCertType type = null;
+        QCStatement qcTypeStatement = this.qcStatements.get(ETSIQCObjectIdentifiers.id_etsi_qcs_QcType.getId());
+        if(qcTypeStatement != null){
+           ASN1Encodable qcTypeValue = qcTypeStatement.getStatementInfo();
+           ASN1Encodable seq = ((DLSequence)qcTypeValue).getObjectAt(0);
+           ASN1ObjectIdentifier qcTypeValueOid = ASN1ObjectIdentifier.getInstance(seq);
+           try {
+               type = EidasCertType.getInstance(qcTypeValueOid.getId());
+           } catch (Exception e){
+               String str = e.toString();
+           }
+        }
+        return Optional.ofNullable(type);
+
+        //return Arrays.asList(EidasCertType.values()).stream().filter(t -> this.qcStatements.containsKey(t.getOid())).findAny();
     }
 
     public void setPsd2QcStatement(Psd2QcStatement psd2QCStatement) {
