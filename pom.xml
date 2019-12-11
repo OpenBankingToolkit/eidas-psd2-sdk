@@ -34,6 +34,13 @@
     </description>
     <url>https://github.com/OpenBankingToolkit/eidas-psd2-sdk/</url>
 
+    <parent>
+        <groupId>com.forgerock.openbanking</groupId>
+        <artifactId>forgerock-openbanking-starter-parent</artifactId>
+        <version>1.0.52</version>
+        <relativePath /> <!-- lookup parent from repository -->
+    </parent>
+
     <properties>
         <bouncycastle.version>1.62</bouncycastle.version>
         <java.version>11</java.version>
@@ -56,7 +63,6 @@
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcprov-jdk15on</artifactId>
-            <version>${bouncycastle.version}</version>
         </dependency>
         <dependency>
             <groupId>org.bouncycastle</groupId>
@@ -66,7 +72,6 @@
         <dependency>
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
-            <version>2.2.11</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -77,108 +82,9 @@
         <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
-            <version>1.10.19</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-                <inherited>true</inherited>
-                <configuration>
-                    <source>${maven.compiler.source}</source>
-                    <target>${maven.compiler.target}</target>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>${version.javadoc.plugin}</version>
-                <configuration>
-                    <source>8</source>
-                    <minmemory>128m</minmemory>
-                    <maxmemory>1024m</maxmemory>
-                    <quiet>false</quiet>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>2.5.3</version>
-                <configuration>
-                    <scmCommentPrefix>[ci skip]</scmCommentPrefix>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>com.mycila</groupId>
-                <artifactId>license-maven-plugin</artifactId>
-                <version>3.0</version>
-                <configuration>
-                    <header>file://${project.basedir}/legal/LICENSE.txt</header>
-                    <includes>
-                        <include>**/*.java</include>
-                        <include>pom.xml</include>
-                    </includes>
-                    <excludes>
-                        <exclude>**/README</exclude>
-                        <exclude>**/*sh</exclude>
-                        <exclude>**/*txt</exclude>
-                        <exclude>settings.xml</exclude>
-                        <exclude>src/test/resources/**</exclude>
-                        <exclude>src/main/resources/**</exclude>
-                    </excludes>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>process-sources</phase>
-                        <goals>
-                            <goal>format</goal>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
-
-    <profiles>
-        <profile>
-            <id>travis</id>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.6</version>
-                        <configuration>
-                            <passphrase>${env.GPG_PASSPHRASE}</passphrase>
-                            <keyname>DA5A83E21839FB2F60811F8E56780DDF77F42B2C</keyname>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>sign-artifacts</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>sign</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
-    </profiles>
 
     <scm>
         <connection>scm:git:https://github.com/OpenBankingToolkit/eidas-psd2-sdk.git</connection>
