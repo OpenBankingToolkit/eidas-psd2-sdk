@@ -24,15 +24,15 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.forgerock</groupId>
-    <artifactId>forgerock-eidas-psd2-cert-sdk</artifactId>
+    <groupId>com.forgerock.openbanking</groupId>
+    <artifactId>eidas-psd2-cert</artifactId>
     <packaging>jar</packaging>
     <version>1.14-SNAPSHOT</version>
     <name>forgerock-eidas-psd2-cert-sdk</name>
     <description>
         A Java SDK to manipulate EIDAS and PSD2 certificate
     </description>
-    <url>https://github.com/ForgeCloud/eidas-psd2-sdk</url>
+    <url>https://github.com/OpenBankingToolkit/eidas-psd2-sdk/</url>
 
     <properties>
         <bouncycastle.version>1.62</bouncycastle.version>
