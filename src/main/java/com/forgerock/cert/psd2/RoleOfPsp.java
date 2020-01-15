@@ -55,7 +55,7 @@ import org.bouncycastle.asn1.*;
  */
 public class RoleOfPsp extends ASN1Object {
 
-    private Psd2Role role;
+    public Psd2Role role;
 
     public static RoleOfPsp getInstance(Object obj){
         if(obj instanceof RoleOfPsp){
