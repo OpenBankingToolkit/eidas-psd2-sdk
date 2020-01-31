@@ -52,9 +52,13 @@ public class Psd2CertInfoTest {
     @Parameterized.Parameters
     public static Collection<Object[]> data(){
         Set<Object[]> testCerts = new HashSet<Object[]>();
-//        testCerts.add(new Object[]{new CertificateTestSpec("FrDirectoryPsd2Certificate", "src/test/resources/dev-transport.pem", true, EidasCertType.WEB)});
+        testCerts.add(new Object[]{new CertificateTestSpec("FrDirectoryPsd2Certificate", "src/test/resources/dev" +
+                "-transport.pem", true, EidasCertType.WEB)});
         testCerts.add(new Object[]{new CertificateTestSpec("OBDirectoryPsd2Certificate", "src/test/resources/ob-transport.pem", true, EidasCertType.WEB)});
         testCerts.add(new Object[]{new CertificateTestSpec("FrDirectoryPrePsd2Cert", "src/test/resources/fr-directory.pem", false, null)});
+        testCerts.add(new Object[]{new CertificateTestSpec("FrDirectoryPrePsd2Cert", "src/test/resources/multicert" +
+                "-psd2-eidas.cer",
+                true, EidasCertType.WEB)});
 
         return testCerts;
     }
@@ -94,7 +98,6 @@ public class Psd2CertInfoTest {
      * @see <a href="https://www.etsi.org/deliver/etsi_ts/119400_119499/119495/01.03.02_60/ts_119495v010302p.pdf">
      *     https://www.etsi.org/deliver/etsi_ts/119400_119499/119495/01.03.02_60/ts_119495v010302p.pdf</a>
      */
-    @Ignore
     public void getOrganisationId() throws NoSuchRDNInField, CertificateException, IOException {
         Optional<String> orgIdOptional = this.psd2CertInfo.getOrganizationId();
         assertThat(orgIdOptional.isPresent(), is(this.testSpec.isPsd2Cert()));

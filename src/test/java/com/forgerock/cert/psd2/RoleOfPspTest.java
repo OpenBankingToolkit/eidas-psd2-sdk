@@ -26,6 +26,15 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.lang.reflect.Field;
+
+import net.minidev.json.JSONStyle;
+import net.minidev.json.reader.BeansWriterASM;
+
+
 
 public class RoleOfPspTest {
 
@@ -38,4 +47,18 @@ public class RoleOfPspTest {
         assertThat(deserialized, is(serialized));
     }
 
+    @Test
+    /**
+     * Test for issue reported here;
+     * https://github.com/OpenBankingToolkit/openbanking-reference-implementation/issues/81
+     */
+    public void testForIssue81() throws NoSuchFieldException, IOException {
+        RoleOfPsp roleOfPsp = new RoleOfPsp(Psd2Role.PSP_AI);
+        Field f = RoleOfPsp.class.getDeclaredField("role");
+        BeansWriterASM bASM = new BeansWriterASM();
+        StringWriter stringWriter = new StringWriter();
+        bASM.writeJSONString(roleOfPsp, stringWriter, JSONStyle.NO_COMPRESS);
+        String out = stringWriter.toString();
+        assertThat(out, is("{\"role\":\"PSP_AI\"}"));
+    }
 }
