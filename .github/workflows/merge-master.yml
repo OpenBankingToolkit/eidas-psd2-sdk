@@ -31,7 +31,7 @@ jobs:
           owner: openbanking-toolkit
           repo: OpenBankingToolKit
 
-          package-name: eidas-psd2-sdk
+          package-name: eidas-psd2-cert
           package-description: EIDAS/PSD2 library for Java
           package-url: https://github.com/OpenBankingToolkit/eidas-psd2-sdk
           package-license: Apache-2.0
