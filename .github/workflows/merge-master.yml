@@ -8,64 +8,26 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    name: Check Master Integrity
     steps:
-      - uses: actions/checkout@v1
+      - name: Checkout code
+        uses: actions/checkout@v1
 
-      - name: Check Copyright
-        uses: qcastel/github-actions-maven-cmd@master
+      - name: Set up java environment
+        uses: actions/setup-java@v1
+        with: # running setup-java
+          java-version: '11'
+          architecture: x64
+
+      - name: Cache Maven packages
+        uses: actions/cache@v1
         with:
-          maven-args: "license:check"
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven2-${{ hashFiles('**/pom.xml') }}
 
-      - name: Build and Test
-        uses: qcastel/github-actions-maven-cmd@master
-        with:
-          maven-args: "verify"
-
-      - name: Create Package
-        uses: benjefferies/create-bintray-package@master
-        with:
-          bintray-user: openbankingtoolkit
-          bintray-token: ${{ secrets.BINTRAY_API_KEY }}
-
-          owner: openbanking-toolkit
-          repo: OpenBankingToolKit
-
-          package-name: eidas-psd2-cert
-          package-description: EIDAS/PSD2 library for Java
-          package-url: https://github.com/OpenBankingToolkit/eidas-psd2-sdk
-          package-license: Apache-2.0
-
-      - name: Temporarily disable "include administrators" branch protection
-        uses: benjefferies/branch-protection-bot@master
-        if: always()
-        with:
-          access-token: ${{ secrets.ACCESS_TOKEN }}
-          enforce_admins: false
-
-      - name: Release
-        uses: qcastel/github-actions-maven-release@master
-        with:
-          gpg-enabled: "true"
-          gpg-key-id: ${{ secrets.GITHUB_GPG_KEY_ID }}
-          gpg-key: ${{ secrets.GITHUB_GPG_KEY }}
-
-          maven-repo-server-id: bintray-openbankingtoolkit-OpenBankingToolkit
-          maven-repo-server-username: openbankingtoolkit
-          maven-repo-server-password: ${{ secrets.BINTRAY_API_KEY }}
-
-          git-release-bot-name: "fropenbanking"
-          git-release-bot-email: "obst@forgerock.com"
-
-          access-token: ${{ secrets.ACCESS_TOKEN }}
-
-      - name: Enable "include administrators" branch protection
-        uses: benjefferies/branch-protection-bot@master
-        if: always()
-        with:
-          access-token: ${{ secrets.ACCESS_TOKEN }}
-          enforce_admins: true
+      - name: Build project with Maven # build the project
+        run: mvn -B clean verify --file pom.xml # this command executes each default lifecycle phase in order (validate, compile, test, package, etc), before executing verify.
 
       - uses: codecov/codecov-action@v1
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+          token: ${{ secrets.CODECOV_ACCESS_TOKEN }}
