@@ -48,7 +48,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <version.javadoc.plugin>3.0.1</version.javadoc.plugin>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jwt.nimbus.version>7.9</jwt.nimbus.version>
+        <jwt.nimbus.version>9.1.1</jwt.nimbus.version>
     </properties>
 
     <dependencyManagement>
