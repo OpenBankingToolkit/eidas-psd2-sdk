@@ -20,15 +20,14 @@
     under the License.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.forgerock.openbanking</groupId>
     <artifactId>eidas-psd2-cert</artifactId>
     <packaging>jar</packaging>
-    <version>1.27-SNAPSHOT</version>
+    <version>1.28-SNAPSHOT</version>
     <name>forgerock-eidas-psd2-cert-sdk</name>
     <description>
         A Java SDK to manipulate EIDAS and PSD2 certificate
@@ -51,6 +50,7 @@
         <junit.version>4.13.1</junit.version>
         <json.smart.version>2.3</json.smart.version>
         <license-maven-plugin.version>3.0</license-maven-plugin.version>
+        <maven-release-plugin.version>3.0.0-M1</maven-release-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -125,7 +125,7 @@
                 <artifactId>license-maven-plugin</artifactId>
                 <version>${license-maven-plugin.version}</version>
                 <configuration>
-                    <header>file://${maven.multiModuleProjectDirectory}/legal/LICENSE.txt</header>
+                    <header>file://${project.basedir}/legal/LICENSE.txt</header>
                     <includes>
                         <include>**/*.java</include>
                         <include>pom.xml</include>
@@ -140,6 +140,15 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>${maven-release-plugin.version}</version>
+                <configuration>
+                    <tagNameFormat>@{version}</tagNameFormat>
+                    <scmCommentPrefix>Release candidate:</scmCommentPrefix>
+                </configuration>
             </plugin>
         </plugins>
     </build>

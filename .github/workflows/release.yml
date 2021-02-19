@@ -31,7 +31,7 @@ jobs:
           server-password: MAVEN_CENTRAL_TOKEN # env variable for token in deploy
 
       - name: Release package
-        run:  mvn -B deploy
+        run:  mvn -B deploy -DskipTests
         env:
           MAVEN_USERNAME: ${{ secrets.FR_ARTIFACTORY_USER }}
           MAVEN_CENTRAL_TOKEN: ${{ secrets.FR_ARTIFACTORY_TOKEN }}
