@@ -41,18 +41,15 @@
 
     <properties>
         <bouncycastle.version>1.62</bouncycastle.version>
-        <bcpkix.jdk15on.version>1.55</bcpkix.jdk15on.version>
+        <bcpkix.jdk15on.version>1.68</bcpkix.jdk15on.version>
         <jaxb.javax.version>2.2</jaxb.javax.version>
         <java.version>11</java.version>
-        <lombok.version>1.18.8</lombok.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <version.javadoc.plugin>3.0.1</version.javadoc.plugin>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <jwt.nimbus.version>7.9</jwt.nimbus.version>
-        <junit.version>4.12</junit.version>
+        <junit.version>4.13.1</junit.version>
         <json.smart.version>2.3</json.smart.version>
-        <mockito.core.version>3.5.11</mockito.core.version>
         <license-maven-plugin.version>3.0</license-maven-plugin.version>
     </properties>
 
@@ -60,12 +57,6 @@
     </dependencyManagement>
 
     <dependencies>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-            <version>${junit.version}</version>
-        </dependency>
         <dependency>
             <groupId>org.bouncycastle</groupId>
             <artifactId>bcprov-jdk15on</artifactId>
@@ -87,6 +78,12 @@
             <artifactId>json-smart</artifactId>
             <version>${json.smart.version}</version>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+            <version>${junit.version}</version>
         </dependency>
     </dependencies>
 
