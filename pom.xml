@@ -53,6 +53,7 @@
         <junit.version>4.12</junit.version>
         <json.smart.version>2.3</json.smart.version>
         <mockito.core.version>3.5.11</mockito.core.version>
+        <license-maven-plugin.version>3.0</license-maven-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -130,5 +131,29 @@
             </snapshots>
         </repository>
     </repositories>
-
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.mycila</groupId>
+                <artifactId>license-maven-plugin</artifactId>
+                <version>${license-maven-plugin.version}</version>
+                <configuration>
+                    <header>file://${maven.multiModuleProjectDirectory}/legal/LICENSE.txt</header>
+                    <includes>
+                        <include>**/*.java</include>
+                        <include>pom.xml</include>
+                    </includes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>process-sources</phase>
+                        <goals>
+                            <goal>format</goal>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
