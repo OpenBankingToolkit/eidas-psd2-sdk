@@ -49,7 +49,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <junit.version>4.13.1</junit.version>
         <json.smart.version>2.3</json.smart.version>
-        <license-maven-plugin.version>3.0</license-maven-plugin.version>
+        <license-maven-plugin.version>4.0</license-maven-plugin.version>
         <maven-release-plugin.version>3.0.0-M1</maven-release-plugin.version>
     </properties>
 
