@@ -40,7 +40,7 @@
 
     <properties>
         <bouncycastle.version>1.62</bouncycastle.version>
-        <bcpkix.jdk15on.version>1.68</bcpkix.jdk15on.version>
+        <bcpkix.jdk15on.version>1.69</bcpkix.jdk15on.version>
         <jaxb.javax.version>2.2</jaxb.javax.version>
         <java.version>11</java.version>
         <maven.compiler.source>1.8</maven.compiler.source>
